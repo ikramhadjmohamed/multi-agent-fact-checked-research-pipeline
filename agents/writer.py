@@ -34,9 +34,14 @@ Rules:
 - Do not state anything as fact that isn't backed by a finding above.
 - If a finding has a [caution: ...] note, reflect that caution in your wording
   (e.g. "one source suggests..." instead of stating it flatly as settled fact).
-- Do not mention the open_questions as if they were answered - you may note that a
-  particular aspect remains unclear, without inventing an answer to it.
+- Do not mention the open_questions above anywhere in your summary, not even to say something is
+  "unclear" or "still being explored". Any such meta-comment about the research itself cannot be
+  cited to a finding, so the Critic will always reject it. Open questions are handled separately -
+  just write the summary using only what the findings actually support.
 - Write 3-6 sentences. Plain prose, no headers or bullet lists.
+- Do not add a concluding or "wrap-up" sentence that combines multiple findings into a broader
+  evaluative judgment (e.g. "this makes RAG beneficial/advantageous/valuable"). Report each
+  finding's own content directly; do not add a summary-level opinion on top of what the findings state.
 
 Return ONLY the summary text. No preamble, no explanation of what you're doing."""
 
