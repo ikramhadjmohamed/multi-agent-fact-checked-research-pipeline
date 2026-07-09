@@ -75,6 +75,17 @@ def _validate_no_fabricated_sources(research: ResearchOutput) -> None:
         if f.source_id not in valid_ids:
             raise ValueError(f"Finding {f.id} references unknown source_id '{f.source_id}'")
 
+def _strip_code_fences(text: str) -> str:
+    """The prompt says 'no markdown fences', but LLMs sometimes wrap JSON in
+```json ... ``` or ``` ... ``` anyway. Prompting alone isn't reliable
+    enough to guarantee this never happens (same lesson as the citation
+    rules earlier), so we defensively strip fences in code before parsing."""
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        stripped = stripped.split("\n", 1)[1] if "\n" in stripped else stripped[3:]
+        if stripped.rstrip().endswith("```"):
+            stripped = stripped.rstrip()[:-3]
+    return stripped.strip()
 
 def research(question: str, api_key: str) -> ResearchOutput:
     client = Groq(api_key=api_key)
@@ -88,14 +99,30 @@ def research(question: str, api_key: str) -> ResearchOutput:
 
     for attempt in range(MAX_RETRIES + 1):
         raw_text = _call_llm(client, prompt, correction)
+
+        if not raw_text or not raw_text.strip():
+            print(f"  [researcher] WARNING: empty response on attempt {attempt + 1}")
+            correction = "Your previous response was completely empty. Return the JSON object described above."
+            if attempt == MAX_RETRIES:
+                raise RuntimeError(
+                    f"Researcher got an empty response from the LLM after {MAX_RETRIES + 1} attempts. "
+                    "This usually means an API-side issue (rate limit, transient error) rather than a "
+                    "prompt/schema problem - try re-running."
+                )
+            continue
+
         try:
-            data = json.loads(raw_text)
+            data = json.loads(_strip_code_fences(raw_text))
             output = ResearchOutput.model_validate(data)
             _validate_no_fabricated_sources(output)
             return output
         except (json.JSONDecodeError, ValidationError, ValueError) as e:
+            print(f"  [researcher] WARNING: invalid response on attempt {attempt + 1}: {e}")
+            print(f"  [researcher] raw response was: {raw_text[:300]}")
             correction = str(e)
             if attempt == MAX_RETRIES:
                 raise RuntimeError(f"Researcher failed validation after {MAX_RETRIES + 1} attempts: {e}")
+
+    raise RuntimeError("unreachable")
 
     raise RuntimeError("unreachable")
