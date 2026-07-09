@@ -42,7 +42,15 @@ Rules:
 - Do not add a concluding or "wrap-up" sentence that combines multiple findings into a broader
   evaluative judgment (e.g. "this makes RAG beneficial/advantageous/valuable"). Report each
   finding's own content directly; do not add a summary-level opinion on top of what the findings state.
-
+- When citing multiple findings together, you may list or compare facts that each finding
+  directly states. Do NOT combine findings to infer a new broader conclusion, causal
+  relationship, or general judgment, unless one of the cited findings explicitly states
+  that conclusion itself.
+  Self-check before writing a sentence that cites 2+ findings: does at least ONE single
+  finding, on its own, already state this exact conclusion? If yes, it's fine to cite it
+  alongside supporting context. If the conclusion only emerges by combining two findings
+  together, do not write it - just state each finding's fact separately instead.
+  
 Return ONLY the summary text. No preamble, no explanation of what you're doing."""
 
     if revision_context:
