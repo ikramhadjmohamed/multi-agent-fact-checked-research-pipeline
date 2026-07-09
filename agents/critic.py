@@ -79,6 +79,15 @@ def _call_llm(client: Groq, prompt: str, correction: str = "") -> str:
     )
     return response.choices[0].message.content
 
+def _strip_code_fences(text: str) -> str:
+    """Same defensive stripping as researcher.py - the LLM occasionally
+    wraps JSON in ``` fences despite the prompt saying not to."""
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        stripped = stripped.split("\n", 1)[1] if "\n" in stripped else stripped[3:]
+        if stripped.rstrip().endswith("```"):
+            stripped = stripped.rstrip()[:-3]
+    return stripped.strip()
 
 def critique(draft: str, research: ResearchOutput, api_key: str) -> RawCriticOutput:
     client = Groq(api_key=api_key)
@@ -88,7 +97,7 @@ def critique(draft: str, research: ResearchOutput, api_key: str) -> RawCriticOut
     for attempt in range(MAX_RETRIES + 1):
         raw_text = _call_llm(client, prompt, correction)
         try:
-            data = json.loads(raw_text)
+            data = json.loads(_strip_code_fences(raw_text))
             return RawCriticOutput.model_validate(data)
         except (json.JSONDecodeError, ValidationError) as e:
             correction = str(e)
