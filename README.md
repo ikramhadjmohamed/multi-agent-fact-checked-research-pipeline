@@ -112,6 +112,10 @@ python -m scripts.check_writer data\research_<timestamp>.json
 python -m scripts.check_critic data\research_<timestamp>.json data\draft_<timestamp>.json
 python -m scripts.check_direction_reversal
 ```
+## Demo
+
+See [`demo_output.txt`](./demo_output.txt) for a full run of the pipeline end-to-end,
+including one Critic-triggered revision round.
 
 ## Tools, models, frameworks
 
