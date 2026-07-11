@@ -1,0 +1,54 @@
+=== QUESTION ===
+Risks of AI tutors in education
+
+--- Researching ---
+Found 3 findings from 3 sources.
+
+--- Writing first draft ---
+AI tutors in education can provide unparalleled support for student learning by providing real-time assessment and intelligent feedback [f1]. One source suggests that there are risks of AI in education, including algorithmic bias and student privacy [f2]. According to one proposal, teaching critical thinking, verifying information, limiting screen time, and controlling privacy settings can help protect kids from risks [f3]. A source cautions about the risks of AI in education, noting the importance of guardrails, governance steps, and future-facing strategies to protect equity and learning outcomes [f2]. Some gurus propose that teaching critical thinking and controlling privacy settings can help mitigate these risks [f3].
+
+--- Critic reviewing (revision 0) ---
+  [supported | major] AI tutors in education can provide unparalleled support for student learning by providing real-time assessment and intelligent feedback
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | major] One source suggests that there are risks of AI in education, including algorithmic bias and student privacy
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | major] According to one proposal, teaching critical thinking, verifying information, limiting screen time, and controlling privacy settings can help protect kids from risks
+      finding_ids: ['f3'] | feedback: fine as-is
+  [partially_supported | major] A source cautions about the risks of AI in education, noting the importance of guardrails, governance steps, and future-facing strategies to protect equity and learning outcomes
+      finding_ids: ['f2'] | feedback: soften the claim to match the finding
+  [partially_supported | minor] Some gurus propose that teaching critical thinking and controlling privacy settings can help mitigate these risks
+      finding_ids: ['f3'] | feedback: add citation for the specific risks being mitigated
+  Summary feedback: The draft is generally well-supported, but some claims could be softened or clarified to better match the cited findings. Additionally, some claims could benefit from more specific citations to support the proposed solutions.
+  Major issues: 1 | Minor issues: 0 | Approved: False
+
+--- Revising draft based on Critic feedback ---
+AI tutors in education can provide unparalleled support for student learning by providing real-time assessment and intelligent feedback [f1]. One source suggests that there are risks associated with AI in education, including algorithmic bias and student privacy [f2]. According to this source, these risks may be addressed with guardrails, governance steps, and future-facing strategies to protect equity and learning outcomes [f2]. Some gurus propose that teaching critical thinking, verifying information, limiting screen time, and controlling privacy settings can help mitigate the risks of AI in education, such as algorithmic bias and student privacy [f2][f3]. AI tutors can act as an always-on resource that supplements traditional teaching methods [f1].
+
+--- Critic reviewing (revision 1) ---
+  [supported | major] AI tutors in education can provide unparalleled support for student learning by providing real-time assessment and intelligent feedback
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | major] One source suggests that there are risks associated with AI in education, including algorithmic bias and student privacy
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | major] these risks may be addressed with guardrails, governance steps, and future-facing strategies to protect equity and learning outcomes
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | major] Some gurus propose that teaching critical thinking, verifying information, limiting screen time, and controlling privacy settings can help mitigate the risks of AI in education, such as algorithmic bias and student privacy
+      finding_ids: ['f2', 'f3'] | feedback: fine as-is
+  [supported | minor] AI tutors can act as an always-on resource that supplements traditional teaching methods
+      finding_ids: ['f1'] | feedback: fine as-is
+  Summary feedback: The draft is well-supported by the provided findings. All claims are backed by relevant evidence, and the writer effectively uses the findings to support their statements. No changes are necessary.
+  Major issues: 0 | Minor issues: 0 | Approved: True
+
+=== FINAL RESULT (approved) ===
+AI tutors in education can provide unparalleled support for student learning by providing real-time assessment and intelligent feedback [f1]. One source suggests that there are risks associated with AI in education, including algorithmic bias and student privacy [f2]. According to this source, these risks may be addressed with guardrails, governance steps, and future-facing strategies to protect equity and learning outcomes [f2]. Some gurus propose that teaching critical thinking, verifying information, limiting screen time, and controlling privacy settings can help mitigate the risks of AI in education, such as algorithmic bias and student privacy [f2][f3]. AI tutors can act as an always-on resource that supplements traditional teaching methods [f1].
+
+Open questions the research could not confirm:
+- What are the long-term effects of AI tutors on student learning outcomes?
+- How can AI tutors be designed to mitigate risks and ensure equity in education?
+
+=== METRICS ===
+Findings: 3 | Sources: 3
+Supported-claim %: 60.0% (first draft) -> 100.0% (final)
+Citations in final draft: 6
+Revision rounds: 1
+Unsupported claims removed: 0
+Final approved: True

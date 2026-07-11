@@ -1,0 +1,39 @@
+=== QUESTION ===
+Limitations of RAG
+
+--- Researching ---
+Found 2 findings from 5 sources.
+
+--- Writing first draft ---
+RAG systems have limitations such as residual hallucinations, performance bottlenecks, and debugging complexity [f1]. One source suggests that RAG requires iterative reasoning, well-organized data, and is susceptible to biased or outdated information [f2]. RAG systems are also limited by the need for well-organized data and the potential for biased or outdated information [f2]. Additionally, RAG systems may experience performance bottlenecks and debugging complexity [f1]. The limitations of RAG include residual hallucinations, which can affect their performance [f1]. RAG's limitations also encompass the need for iterative reasoning [f2].
+
+--- Critic reviewing (revision 0) ---
+  [supported | major] RAG systems have limitations such as residual hallucinations, performance bottlenecks, and debugging complexity
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | major] One source suggests that RAG requires iterative reasoning, well-organized data, and is susceptible to biased or outdated information
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | minor] RAG systems are also limited by the need for well-organized data and the potential for biased or outdated information
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | minor] Additionally, RAG systems may experience performance bottlenecks and debugging complexity
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | minor] The limitations of RAG include residual hallucinations, which can affect their performance
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | minor] RAG's limitations also encompass the need for iterative reasoning
+      finding_ids: ['f2'] | feedback: fine as-is
+  Summary feedback: The draft is well-supported by the cited findings. However, some claims are repetitive and could be condensed for better clarity and concision. The writer may consider rephrasing or removing redundant statements to improve the overall flow of the draft.
+  Major issues: 0 | Minor issues: 0 | Approved: True
+
+=== FINAL RESULT (approved) ===
+RAG systems have limitations such as residual hallucinations, performance bottlenecks, and debugging complexity [f1]. One source suggests that RAG requires iterative reasoning, well-organized data, and is susceptible to biased or outdated information [f2]. RAG systems are also limited by the need for well-organized data and the potential for biased or outdated information [f2]. Additionally, RAG systems may experience performance bottlenecks and debugging complexity [f1]. The limitations of RAG include residual hallucinations, which can affect their performance [f1]. RAG's limitations also encompass the need for iterative reasoning [f2].
+
+Open questions the research could not confirm:
+- What are all the limitations of RAG?
+- How do the limitations of RAG impact its applications?
+
+=== METRICS ===
+Findings: 2 | Sources: 5
+Supported-claim %: 100.0% (first draft) -> 100.0% (final)
+Citations in final draft: 6
+Revision rounds: 0
+Unsupported claims removed: 0
+Final approved: True

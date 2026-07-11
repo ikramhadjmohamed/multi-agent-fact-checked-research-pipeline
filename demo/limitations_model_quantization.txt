@@ -1,0 +1,40 @@
+=== QUESTION ===
+Limitations of model quantization
+
+--- Researching ---
+  [researcher] Dropped 1 finding(s) with weak/vague evidence:
+      [f3] evidence: "However, this does limit the model ..."
+Found 3 findings from 5 sources.
+
+--- Writing first draft ---
+Quantization limitations include loss of precision, increased error rates, and reduced model performance [f1]. One source suggests that quantization reduces the precision of model parameters and activations, which can trade off some accuracy [f2]. According to one vendor, quantized parts may suffer more with a broad static approach and have limited adaptability for static quantization for varying input patterns [f4]. Quantization reduces the precision of model parameters and activations, such as from FP32/FP16 to FP8, to shrink memory footprint, improve inference speed, and lower energy consumption [f2]. This reduction in precision can result in a trade-off in accuracy [f2]. Quantization can lead to reduced model performance due to the loss of precision and increased error rates [f1].
+
+--- Critic reviewing (revision 0) ---
+  [supported | major] Quantization limitations include loss of precision, increased error rates, and reduced model performance
+      finding_ids: ['f1'] | feedback: fine as-is
+  [supported | minor] One source suggests that quantization reduces the precision of model parameters and activations, which can trade off some accuracy
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | minor] According to one vendor, quantized parts may suffer more with a broad static approach and have limited adaptability for static quantization for varying input patterns
+      finding_ids: ['f4'] | feedback: fine as-is
+  [supported | major] Quantization reduces the precision of model parameters and activations, such as from FP32/FP16 to FP8, to shrink memory footprint, improve inference speed, and lower energy consumption
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | minor] This reduction in precision can result in a trade-off in accuracy
+      finding_ids: ['f2'] | feedback: fine as-is
+  [supported | major] Quantization can lead to reduced model performance due to the loss of precision and increased error rates
+      finding_ids: ['f1'] | feedback: fine as-is
+  Summary feedback: The draft is well-supported by the cited findings. All claims are backed by evidence and accurately reflect the findings. No changes are necessary.
+  Major issues: 0 | Minor issues: 0 | Approved: True
+
+=== FINAL RESULT (approved) ===
+Quantization limitations include loss of precision, increased error rates, and reduced model performance [f1]. One source suggests that quantization reduces the precision of model parameters and activations, which can trade off some accuracy [f2]. According to one vendor, quantized parts may suffer more with a broad static approach and have limited adaptability for static quantization for varying input patterns [f4]. Quantization reduces the precision of model parameters and activations, such as from FP32/FP16 to FP8, to shrink memory footprint, improve inference speed, and lower energy consumption [f2]. This reduction in precision can result in a trade-off in accuracy [f2]. Quantization can lead to reduced model performance due to the loss of precision and increased error rates [f1].
+
+Open questions the research could not confirm:
+- How to mitigate the limitations of model quantization
+
+=== METRICS ===
+Findings: 3 | Sources: 5
+Supported-claim %: 100.0% (first draft) -> 100.0% (final)
+Citations in final draft: 6
+Revision rounds: 0
+Unsupported claims removed: 0
+Final approved: True
