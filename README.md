@@ -115,21 +115,34 @@ python -m scripts.check_direction_reversal
 
 ```
 .
-├── agents/          Researcher, Writer, Critic - each makes LLM calls
-├── schemas/         Pydantic data shapes + decision_rules.py (the one non-LLM decision)
-├── utils/           storage.py (save/load), metrics.py (pure calculations)
-├── scripts/         manual one-off checks (cost API calls, for debugging one stage)
-├── tests/           deterministic automated tests (no API calls)
-├── data/            saved JSON outputs per run (gitignored except .gitkeep)
-├── main.py          orchestrator - the actual pipeline loop
+├── agents/
+│   ├── critic.py        Verifies draft claims against research findings
+│   ├── researcher.py     Searches + extracts structured findings
+│   ├── revision.py       Builds revision feedback, cleans approved drafts
+│   └── writer.py         Drafts summary, cites findings by [f_id]
+├── schemas/
+│   ├── critic_schema.py     Verdict/CriticDecision data shapes
+│   ├── decision_rules.py    The one non-LLM decision: approve/reject
+│   ├── draft_schema.py      Wraps Writer output for storage
+│   ├── metrics_schema.py    Evaluation metrics data shape
+│   └── research_schema.py   Finding/Source/ResearchOutput data shapes
+├── utils/
+│   ├── metrics.py        Pure calculations (supported %, citation count)
+│   └── storage.py         Generic save/load for any Pydantic model
+├── scripts/               Manual one-off checks (cost API calls, for debugging)
+├── tests/                 Deterministic automated tests (no API calls)
+├── demo/                  Full transcripts for each evaluation topic
+├── data/                  Saved JSON per run (gitignored except .gitkeep)
+├── main.py                Orchestrator - the actual pipeline loop
 ├── requirements.txt
+├── .env.example
 └── README.md
 ```
 
 ## Demo
 
-A complete end-to-end execution of the system is included in
-[`demo_output.txt`](./demo_output.txt).
+A complete end-to-end execution of the system, including a Critic-triggered revision
+round, is in [`demo/risks_ai_tutors_education.txt`](./demo/risks_ai_tutors_education.txt).
 
 The demo contains:
 - User question
@@ -152,40 +165,28 @@ The demo contains:
   before reaching for a framework
 
 ## Evaluation
-
+ 
 Metrics tracked per run (`schemas/metrics_schema.py`, computed in `utils/metrics.py`):
 first-draft vs. final-draft supported-claim %, citation count, revision count, and count of
 claims stripped from an approved draft.
-
-Tested across 5 topics, several run more than once to check consistency after fixes.
-
-| Question | Findings | First draft % | Final % | Citations | Revisions | Removed | Approved |
-|---|---|---|---|---|---|---|---|
-| Benefits and risks of RAG | 3 | 33.3% | 80.0% | 5 | 2 | 0 | Yes |
-| Risks of AI tutors in education | 3 | 83.3% | 100.0% | 5 | 2 | 0 | Yes |
-| Limitations of model quantization | 3 | 80.0% | 80.0% | 5 | 0 | 0 | Yes |
-| Limitations of RAG | 3 | 83.3% | 83.3% | 8 | 0 | **1** | Yes |
-| Reliability risks of LLMs (before synthesis fix) | 3 | 66.7% | 80.0% | 6 | 2 | 0 | **No** - 1 major issue unresolved after max revisions |
-| Reliability risks of LLMs (after synthesis fix, run 1) | 4 | 80.0% | 100.0% | 6 | 1 | 0 | Yes |
-| Reliability risks of LLMs (after synthesis fix, run 2) | 4 | 100.0% | 100.0% | 6 | 0 | 0 | Yes |
-
-Two rows are worth calling out specifically:
-
-- **"Limitations of RAG"** is the only run where `unsupported_claims_removed` is nonzero -
-  the Critic tolerated one minor unsupported claim (a caveat about source objectivity with
-  no backing finding) and approved the draft, but `clean_approved_draft()` still stripped
-  that specific sentence from the final text before it was shown. This is direct evidence
-  the "approved but still cleaned" behavior actually does something, not just theoretical.
-- **The three "Reliability risks of LLMs" rows** show the before/after effect of the
-  cross-finding synthesis fix (challenge #5 below): the same question failed to converge
-  within 2 revisions before the fix, then converged in 1 revision or 0 revisions on two
-  separate runs after it - different search results each time (live DuckDuckGo isn't
-  deterministic), but the fix held across both.
-
-The 33.3% -> 80.0% RAG run is the strongest single example of the system working as
-intended: the Critic caught real overstatement in claims backed by vendor/promotional
-sources, and the Writer's revision measurably fixed it.
-
+ 
+Tested across 5 topics on the current version of the pipeline (after all fixes below).
+ 
+| Question | Findings | First draft % | Final % | Citations | Revisions | Approved |
+|---|---|---|---|---|---|---|
+| Benefits and risks of RAG | 4 | 100.0% | 100.0% | 5 | 0 | Yes |
+| Limitations of model quantization | 3 | 100.0% | 100.0% | 6 | 0 | Yes |
+| Limitations of RAG | 2 | 100.0% | 100.0% | 6 | 0 | Yes |
+| Reliability risks of LLMs | 4 | 80.0% | 100.0% | 5 | 1 | Yes |
+| Risks of AI tutors in education | 3 | 60.0% | 100.0% | 6 | 1 | Yes |
+ 
+The last two rows are the clearest evidence of the revision loop doing real work: the
+"Risks of AI tutors" run started at only 60% supported (two overstated claims, one
+generalizing across sources it wasn't backed by) and reached 100% after exactly one
+revision round - a concrete, measurable improvement, not just "the system ran."
+ 
+Full transcripts for each run above are in [`demo/`](./demo/).
+ 
 The "Reliability risks of LLMs" run that failed to converge is kept in this table
 deliberately - it's an honest example of the system correctly refusing to approve a draft
 it couldn't fully verify, rather than always reporting success.
@@ -229,6 +230,18 @@ results, not by inspecting code alone:
    direction, so this slipped through as "supported." Fixed by having both the Writer
    avoid reversing direction when paraphrasing, and the Critic explicitly check direction
    and mark reversed claims as "contradicted."
+
+7. **Evidence filter false positives silently dropping relevant findings**: a filter added
+   to drop findings with unclear evidence (see Known limitations below) originally flagged
+   ANY evidence starting with "it", "this", "they" etc. as too vague - including perfectly
+   clear sentences like "This comprehensive analysis examines seven fundamental advantages
+   of RAG...". On one run, this caused the ONLY benefit-related finding to be dropped,
+   so a "benefits AND risks of RAG" question got answered with a risks-only draft that
+   still passed as 100% supported (every remaining claim genuinely was well-cited - the
+   system had no way to notice half the question went unanswered). Fixed by checking the
+   word immediately AFTER the pronoun: "this COMPREHENSIVE analysis" (followed by an
+   adjective/noun) is clear and kept; "it DOES not remove it entirely" (followed by a verb,
+   nothing anchoring "it") is genuinely ambiguous and still correctly dropped.
 
 **Known limitations, not fixed (deliberately scoped out):**
 
