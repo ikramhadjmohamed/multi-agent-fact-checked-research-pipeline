@@ -104,17 +104,30 @@ def _strip_code_fences(text: str) -> str:
     return stripped.strip()
 
 VAGUE_STARTERS = {"it", "this", "they", "these", "that", "those"}
+# If the word right after a vague starter is one of these, the pronoun has
+# nothing anchoring it ("it IS important...", "this MEANS...") - genuinely
+# ambiguous. If instead it's followed by a noun/adjective ("this COMPREHENSIVE
+# analysis...", "these EIGHT limitations..."), the reference is clarified
+# right there in the same snippet, even though it starts with a pronoun.
+DANGLING_FOLLOWERS = {
+    "is", "was", "are", "were", "does", "did", "means", "suggests", "indicates",
+    "shows", "can", "could", "will", "would", "should", "has", "have", "had", "must",
+}
 MIN_EVIDENCE_WORDS = 8
 
 
 def _has_weak_evidence(evidence: str) -> bool:
     """Flags evidence that's too short to verify on its own, or opens with
-    a pronoun/vague reference with no noun in the same snippet to anchor it."""
+    a pronoun immediately followed by a verb with no noun in the snippet
+    to anchor it. A pronoun followed by a noun/adjective is NOT flagged."""
     words = evidence.strip().split()
     if len(words) < MIN_EVIDENCE_WORDS:
         return True
     first_word = words[0].lower().strip(".,;:\"'")
-    return first_word in VAGUE_STARTERS
+    if first_word not in VAGUE_STARTERS:
+        return False
+    second_word = words[1].lower().strip(".,;:\"'") if len(words) > 1 else ""
+    return second_word in DANGLING_FOLLOWERS
 
 
 def _filter_weak_evidence(output: ResearchOutput) -> ResearchOutput:
